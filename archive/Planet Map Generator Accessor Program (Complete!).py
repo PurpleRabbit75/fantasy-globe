@@ -1,0 +1,297 @@
+import time
+from selenium import webdriver
+from selenium.webdriver.common.keys import Keys
+from selenium.webdriver.support.ui import Select
+#import webbrowser 
+import urllib
+
+
+
+URL = "https://topps.diku.dk/torbenm/maps.msp"
+#webbrowser.open_new_tab(URL) 
+global driver
+driver = webdriver.Edge()
+driver.get(URL)
+
+
+
+############################################################## TEST CODE ################################################################
+responses = ["12345678", "q", "Olsson.col", "1000", "500", '', "1", '', "", "", "", "0.01", "none", "False", "True", "False", "C:/Users/abrah/Desktop/Auto-Generated Maps/Demo.bmp"]
+counter = -1
+def input(S):
+    global counter
+    counter += 1
+    #print(responses[counter])
+    return responses[counter]
+############################################################## TEST CODE ################################################################
+
+
+
+
+
+def writeSeed(value = input("Seed: [Expects int 1-10 digits long]\n>>>")):
+    seed_field = driver.find_element("name", "seed")
+    for i in range(10):
+        seed_field.send_keys(Keys.BACK_SPACE)
+    seed_field.send_keys(value)
+
+
+
+
+def writeProjection(value = input("Enter your desired projection. Valid options are M, m, p, q, s, o, g, a, c, i, s\n>>>")):
+    '''# <SELECT NAME="projection" >
+    # <OPTION VALUE="M">Mollweide</option>
+    # <OPTION VALUE="m">Mercator</option>
+    # <OPTION VALUE="p">Peters</option>
+    # <option selected value="q">Square</option>
+    # <OPTION VALUE="s">Stereographic</option>
+    # <OPTION VALUE="o">Orthographic</option>
+    # <OPTION VALUE="g">Gnomonic</option>
+    # <OPTION VALUE="a">Area preserving azimuthal</option>
+    # <OPTION VALUE="c">Conical</option>
+    # <OPTION VALUE="i">Icosahedral</option>
+    # <OPTION VALUE="S">Sinusoidal</option>
+    # </SELECT>'''
+    if (value not in ["M", "m", "p", "q", "s", "o", "g", "a", "c", "i", "S"]):
+        value = "q"
+        print("Invalid value entered. Defaulting to q [square projection]")
+    element = driver.find_element("name", "projection")
+    selector = Select(element)
+    selector.select_by_value(value)
+
+
+
+
+def writeColorMap(value = input('Enter your desired colo[u]r map. Valid options are "Olsson.col", "OlssonLight.col", "Olsson2.col", "default.col", "defaultB.col",\n"burrowsB.col", "burrows.col", "mars.col", "white.col", "yellow.col", "greyscale.col", "Blackbody.col", "Lefebvre.col", "Lefebvre2.col", \n"2col.col"\n>>>')):
+    '''# <SELECT NAME="colourmap" >
+# <option selected value="Olsson.col">Olsson</option>
+# <OPTION VALUE="OlssonLight.col">Olsson light</option>
+# <OPTION VALUE="Olsson2.col">Olsson2</option>
+# <OPTION VALUE="default.col">Mogensen</option>
+# <OPTION VALUE="defaultB.col">Mogensen black</option>
+# <OPTION VALUE="Bathymetric.col">Bathymetric</option>
+# <OPTION VALUE="burrows.col">Burrows</option>
+# <OPTION VALUE="burrowsB.col">Burrows black</option>
+# <OPTION VALUE="mars.col">Mars</option>
+# <OPTION VALUE="white.col">White</option>
+# <OPTION VALUE="yellow.col">Yellow</option>
+# <OPTION VALUE="greyscale.col">Greyscale</option>
+# <OPTION VALUE="Blackbody.col">Black body radiation</option>
+# <OPTION VALUE="Lefebvre.col">Lefebvre</option>
+# <OPTION VALUE="Lefebvre2.col">Lefebvre2</option>
+# <OPTION VALUE="2col.col">uniform blue/green</option>'''
+    if (value not in ["Olsson.col", "OlssonLight.col", "Olsson2.col", "default.col", "defaultB.col", "burrowsB.col", "burrows.col", "mars.col", "white.col", "yellow.col", "greyscale.col", "Blackbody.col", "Lefebvre.col", "Lefebvre2.col", "2col.col"]):
+        value = "Olsson.col"
+        print("Invalid value entered. Defaulting to Olsson.col")
+    element = driver.find_element("name", "colourmap")
+    selector = Select(element)
+    selector.select_by_value(value)
+
+
+
+
+def writeWidth(value = input("Width: [Expects int 1-2000]\n>>>")):
+    seed_field = driver.find_element("name", "width")
+    for i in range(4):
+        seed_field.send_keys(Keys.BACK_SPACE)
+    seed_field.send_keys(value)
+
+
+
+
+def writeHeight(value = input("Height: [Expects int 1-2000]\n>>>")):
+    seed_field = driver.find_element("name", "height")
+    for i in range(4):
+        seed_field.send_keys(Keys.BACK_SPACE)
+    seed_field.send_keys(value)
+
+
+
+
+def writeShading(value = input("Enter your shading preference. Valid options are '', ' -B', ' -b', and ' -d -a 50'\n>>>")):
+    '''# <SELECT NAME="shading" >
+# <option selected value="">None</option>
+# <OPTION VALUE=" -B">Bumpmap</option>
+# <OPTION VALUE=" -b">Bumpmap on land only</option>
+# <OPTION VALUE=" -d -a 50">Daylight</option>
+# </SELECT>'''
+    if (value not in ["", ' -B', ' -b', ' -d -a 50']):
+        value = ""
+        print("Invalid value entered. Defaulting to None")
+    # if (value == "None" or value == "none"):
+    #     value = None
+    element = driver.find_element("name", "shading")
+    selector = Select(element)
+    selector.select_by_value(value)
+
+
+
+
+def writeZoom(value = input("Zoom: [Expects int or float from 0.1 to 10000]\n>>>")):
+    seed_field = driver.find_element("name", "zoom")
+    seed_field.send_keys(Keys.BACK_SPACE)
+    seed_field.send_keys(value)
+
+
+
+
+def writeOutline(value = input("Outline preference. Valid options are '', ' -E ', ' -E2 ', ' -E5 ', ' -E10 ', ' -E-1 ', ' -E-2 ',' -E-3 ' \n>>>")):
+    '''# <td>
+    # <input type="radio" name="outline" value=""
+    # checked>None
+    # <input type="radio" name="outline" value=" -E "
+    # >Coastlines only
+    # <input type="radio" name="outline" value=" -E2 "
+    # >2 (land)
+    # <input type="radio" name="outline" value=" -E5 "
+    # >5 (land)
+    # <input type="radio" name="outline" value=" -E10 "
+    # >10 (land)
+    # <input type="radio" name="outline" value=" -E-1 "
+    # >1 (coast)
+    # <input type="radio" name="outline" value=" -E-2 "
+    # >2 (coast)
+    # <input type="radio" name="outline" value=" -E-3 "
+    # >3 (coast)
+    # </td>'''
+    if (value not in ['', ' -E ', ' -E2 ', ' -E5 ', ' -E10 ', ' -E-1 ', ' -E-2 ',' -E-3 ']):
+        print("Invalid value entered. Defaulting to none.")
+        value = ''
+    # driver.find_element_by_xpath("//input[@value='Female']").click()
+    seed_field = driver.find_element("xpath", "//input[@type='radio' and @name='outline' and @value= '" + value + "']")
+    seed_field.click()
+
+
+
+
+def writeLatitude(value = input("Latitude: [Expects int from -90 to 90]\n>>>")):
+    seed_field = driver.find_element("name", "lati")
+    seed_field.send_keys(Keys.BACK_SPACE)
+    seed_field.send_keys(Keys.BACK_SPACE)
+    seed_field.send_keys(value)
+
+
+
+
+def writeColorAdjust(value = input('Adjust color by latitude. Valid options are "", " -c ", " -c -c ", " -c -c -c " \n>>>')):
+    '''<td>
+    <input type="radio" name="polar" value=""
+    checked>No
+    <input type="radio" name="polar" value=" -c "
+    >Yes
+    <input type="radio" name="polar" value=" -c -c "
+    >Yes, strongly
+    <input type="radio" name="polar" value=" -c -c -c "
+    >Yes, very strongly
+    </td>'''
+    if (value not in ["", " -c ", " -c -c ", " -c -c -c "]):
+        print("Invalid value entered. Defaulting to none.")
+        value = ''
+    seed_field = driver.find_element("xpath", "//input[@type='radio' and @name='polar' and @value='" + value + "']")
+    seed_field.click()
+
+
+
+
+def writeLongitude(value = input("Longitude: [Expects int from -360 to 360]\n>>>")):
+    seed_field = driver.find_element("name", "longi")
+    seed_field.send_keys(Keys.BACK_SPACE)
+    seed_field.send_keys(Keys.BACK_SPACE)
+    seed_field.send_keys(value)
+
+
+
+
+def writeWaterline(value = input("Waterline: [Expects float from -0.1 to 0.1]\n>>>")):
+    seed_field = driver.find_element("name", "water")
+    for i in range(6):
+        seed_field.send_keys(Keys.BACK_SPACE)
+    seed_field.send_keys(value)
+
+
+
+
+def writeGrid(value = input("Grid: [Expects none or int from 1 to 90]\n>>>")):
+    seed_field = driver.find_element("name", "grid")
+    for i in range(4):
+        seed_field.send_keys(Keys.BACK_SPACE)
+    seed_field.send_keys(value)
+
+
+
+
+def writeAltitudeScaling(value = input("Non-linear altitude scaling: True or False\n>>>")):
+    seed_field = driver.find_element("name", "nonLinear")
+    if (value == "True"):
+        seed_field.click()
+
+
+
+
+def writeWrinkly(value = input("Extra wrinkles: True or False\n>>>")):
+    seed_field = driver.find_element("name", "wrinkly")
+    if (value == "True"):
+        seed_field.click()
+
+
+
+
+def writeBiome(value = input("Make biome maps: True or False\n>>>")):
+    seed_field = driver.find_element("name", "biome")
+    if (value == "True"):
+        seed_field.click()
+
+
+
+
+def save(path = input("Please enter the file path where you would like to save the image:\n[For example: C:/Users/me/Desktop/MyNewMap.bmp]\n>>>")):
+    img = driver.find_element("tag name", "img")
+    src = img.get_attribute('src')
+    urllib.request.urlretrieve(src, path)
+
+
+
+def runUI():
+    writeSeed()
+    writeProjection()
+    writeColorMap()
+    writeWidth()
+    writeHeight()
+    writeShading()
+    writeZoom()
+    writeOutline()
+    writeColorAdjust()
+    writeLatitude()
+    writeLongitude()
+    writeWaterline()
+    writeGrid()
+    writeAltitudeScaling()
+    writeWrinkly()
+    writeBiome()
+
+    #<input type="submit" name="what" value="Make map">
+    execButton = driver.find_element("name", "what")
+    execButton.click()
+    print("Waiting 5 s for image to load...")
+    time.sleep(5)
+
+    save()
+    print("Your map has been successfully saved.")
+    
+
+
+
+def countDown(seconds, message):
+    print(message)
+    for i in range (seconds):
+        print(seconds - i)
+        time.sleep(1)
+
+
+    
+
+runUI()
+time.sleep(20)
+countDown(10, "Program quitting in:")
+driver.quit()
+print("Program has terminated.")
