@@ -1,7 +1,6 @@
 import requests
 from time import sleep
 
-session = requests.Session()
 
 params = {
     "seed": "1111111",
@@ -20,14 +19,18 @@ params = {
     "what": "Make map"
 }
 
-request_map_regen = session.post("https://topps.diku.dk/torbenm/maps.msp",data=params)
-get_img_response = session.get(f"https://topps.diku.dk/torbenm/Maps/Map-{params["seed"][-3:]}.bmp")
+
+def get_bitmap(params):
+    session = requests.Session()
+
+    request_map_regen = session.post("https://topps.diku.dk/torbenm/maps.msp",data=params)
+    get_img_response = session.get(f"https://topps.diku.dk/torbenm/Maps/Map-{params["seed"][-3:]}.bmp")
 
 
-request_map_regen.raise_for_status()
-sleep(0.5)
-get_img_response.raise_for_status()
+    request_map_regen.raise_for_status()
+    sleep(0.5)
+    get_img_response.raise_for_status()
 
 
-with open(f"Map-{params["seed"][-3:]}.bmp", "wb") as f:
-    f.write(get_img_response.content)
+    with open(f"Map-{params["seed"][-3:]}.bmp", "wb") as f:
+        f.write(get_img_response.content)
