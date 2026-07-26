@@ -2,7 +2,8 @@ from time import sleep
 from selenium import webdriver
 
 
-URL = "https://web.archive.org/web/20180703195015id_/https://www.maptoglobe.com/#"
+# URL = "https://web.archive.org/web/20180703195015id_/https://www.maptoglobe.com/#"
+URL = "https://woowspace.com/MapToGlobe.html"
 global driver
 driver = webdriver.Edge()
 print("Waiting for website to load...")
