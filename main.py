@@ -6,8 +6,8 @@ import os
 
 def get_params_from_user():
     map_params = {
-        "seed": "1111111",
-        "projection": "M",
+        "seed": "1111115",
+        "projection": "m",
         "width": "500",
         "colourmap": "Mars.col",
         "height": "250",
@@ -23,9 +23,10 @@ def get_params_from_user():
     }
 
     browser = "edge" # pick from "chrome", "firefox", "edge", safari should also work, but I can't test for it
-    renderer = "archive.org" # pick from "archive.org" or "woowspace.com"
+    renderer = "woowspace.com" # pick from "archive.org" or "woowspace.com"
     timeout = 120 # Amount of time in seconds before the program terminates
     return [map_params, browser, renderer, timeout]
+
 
 
 def get_bitmap(map_params):
@@ -99,6 +100,7 @@ def main():
             print(seconds - i)
             sleep(1)
 
+    driver.execute_script("alert('Program will terminate in 10 seconds!')")
     countDown(10, "Program will terminate in")
     driver.close()
     print("program has terminated")
