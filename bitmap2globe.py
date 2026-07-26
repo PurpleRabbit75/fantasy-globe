@@ -1,4 +1,4 @@
-import time
+from time import sleep
 from selenium import webdriver
 
 
@@ -18,7 +18,7 @@ def uploadFile(path_to_bitmap):
 
     driver.execute_script('$("[data-remodal-id=modalUpload]").remodal().open();')
 
-    time.sleep(0.5)
+    sleep(0.5)
 
     driver.execute_script("""
         var modal = $('[data-remodal-id="modalUpload"]');  // Get the modal element
@@ -32,7 +32,7 @@ def main():
 
 
     print("--------------------------------------------------------")
-    time.sleep(120)
+    sleep(120)
 
 
 
@@ -40,7 +40,7 @@ def main():
         print(message)
         for i in range (seconds):
             print(seconds - i)
-            time.sleep(1)
+            sleep(1)
 
     countDown(10, "Program will terminate in")
     driver.close()
