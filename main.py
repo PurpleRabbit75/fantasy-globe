@@ -37,7 +37,7 @@ def get_bitmap(map_params):
 
 
     request_map_regen.raise_for_status()
-    sleep(0.5)
+    sleep(2)
     get_img_response.raise_for_status()
 
 
